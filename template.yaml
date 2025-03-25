@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  events-app
+  Sample SAM Template for events-app
+
+Globals:
+  Function:
+    Timeout: 20
+    MemorySize: 512
+
+Resources:
+  AuthUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: authuser.App::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Role: arn:aws:iam::992657255447:role/LabRole  # <--- Adicione a ARN da LabRole aqui
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-02e5b84bfcffaf081  # Substitua pelo Security Group criado para a Lambda
+        SubnetIds:
+          - subnet-0f849d165103ae570  # Substitua pelas subnets privadas do RDS
+          - subnet-0cd0357f8794ef16e
+      Environment:
+        Variables:
+          DB_SECRET: "db/fastfood"
+          COGNITO_SECRET: "cognito/users"
+      Events:
+        AuthUser:
+          Type: Api
+          Properties:
+            Path: /
+            Method: get
+
+Outputs:
+  AuthUserApi:
+    Description: "API Gateway endpoint URL for Prod stage for AuthUserFunction"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/auth/"
+  AuthUserFunction:
+    Description: "Auth User Lambda Function ARN"
+    Value: !GetAtt AuthUserFunction.Arn

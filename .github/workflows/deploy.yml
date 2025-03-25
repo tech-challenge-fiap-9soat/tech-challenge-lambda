@@ -1,0 +1,45 @@
+name: Deploy AWS Lambda
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Instalar dependências
+        run: |
+            sudo apt-get update
+            sudo apt-get install -y unzip
+
+      - name: Instalar AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+          aws --version
+
+      - name: Instalar AWS SAM CLI
+        run: |
+          brew install aws/tap/aws-sam-cli
+          sam --version
+
+      - name: Configurar o AWS CLI
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set region us-east-1
+
+      - name: Construir a aplicação com AWS SAM
+        run: |
+          sam build
+
+      - name: Fazer o deploy para AWS
+        run: |
+          sam deploy --no-confirm-changeset --no-fail-on-empty-changeset

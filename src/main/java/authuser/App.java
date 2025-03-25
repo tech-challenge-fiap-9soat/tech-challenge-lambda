@@ -19,6 +19,8 @@ import java.util.Map;
 public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
+        System.out.println("...RUNNING LAMBDA AUTH-USER...");
+
         String dbSecret = System.getenv("DB_SECRET");
         String cognitoSecret = System.getenv("COGNITO_SECRET");
 

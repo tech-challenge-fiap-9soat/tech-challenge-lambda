@@ -15,7 +15,7 @@ Resources:
     Properties:
       CodeUri: .
       Handler: authuser.App::handleRequest
-      Runtime: java21
+      Runtime: java11
       Architectures:
         - x86_64
       MemorySize: 512

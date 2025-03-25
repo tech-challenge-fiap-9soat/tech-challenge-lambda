@@ -15,8 +15,9 @@ jobs:
 
       - name: Instalar dependências
         run: |
-            sudo apt-get update
-            sudo apt-get install -y unzip
+          sudo apt-get update
+          sudo apt-get install -y unzip
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
       - name: Instalar AWS CLI
         run: |

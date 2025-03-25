@@ -18,6 +18,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y unzip
 
+      - name: Instalar JDK 21
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openjdk-21-jdk
+
+      - name: Verificar versão do Maven e JDK
+        run: |
+          mvn -v
+          java -version
+
       - name: Instalar AWS CLI
         run: |
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"

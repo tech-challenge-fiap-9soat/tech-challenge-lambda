@@ -19,13 +19,13 @@ Resources:
       Architectures:
         - x86_64
       MemorySize: 512
-      Role: arn:aws:iam::992657255447:role/LabRole  # <--- Adicione a ARN da LabRole aqui
+      Role: arn:aws:iam::630198079907:role/LabRole  # <--- Adicione a ARN da LabRole aqui
       VpcConfig:
         SecurityGroupIds:
-          - sg-02e5b84bfcffaf081  # Substitua pelo Security Group criado para a Lambda
+          - sg-0a0942e258ed558ce  # Substitua pelo Security Group criado para a Lambda
         SubnetIds:
-          - subnet-0f849d165103ae570  # Substitua pelas subnets privadas do RDS
-          - subnet-0cd0357f8794ef16e
+          - subnet-05ac913006f0b3d67  # Substitua pelas subnets privadas do RDS
+          - subnet-0a77cdd88b5a90547
       Environment:
         Variables:
           DB_SECRET: "db/fastfood"

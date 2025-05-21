@@ -96,7 +96,7 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
             RequestBody formBody = new FormBody.Builder()
                     .add("client_id", credentials.get("clientId").toString())
                     .add("client_secret", credentials.get("clientSecret").toString())
-                    .add("scope", "default-m2m-resource-server-tcb5yq/read")
+                    .add("scope", "default-m2m-resource-server-2aqu1m/read")
                     .add("grant_type", "client_credentials")
                     .build();
 

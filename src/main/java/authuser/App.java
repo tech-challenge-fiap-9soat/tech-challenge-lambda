@@ -16,9 +16,9 @@ import java.util.Map;
 /**
  * Handler for requests to Lambda function.
  */
-public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public class App implements RequestHandler<APIGatewayProxyRequestEvent, Map<String, Object>> {
 
-    public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
+    public Map<String, Object> handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
         System.out.println("...RUNNING LAMBDA AUTH-USER...");
 
         String dbSecret = System.getenv("DB_SECRET");
@@ -42,9 +42,10 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
 
             if (this.userExists(cpf, secretsManagerService.getSecretCredentials(dbSecret))) {
                 String tokenJWT = this.generateTokenJWT(secretsManagerService.getSecretCredentials(cognitoSecret));
-                return response
-                        .withStatusCode(200)
-                        .withBody(tokenJWT);
+                JsonNode tokenJson = objectMapper.readTree(tokenJWT); // parse token JSON
+
+                // Retornar o JSON puro
+                return objectMapper.convertValue(tokenJson, Map.class);
             }
 
         } catch (Exception e) {
@@ -52,9 +53,9 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
             e.printStackTrace();
         }
 
-        return response
-                .withBody("User Not Found")
-                .withStatusCode(404);
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("error", "User Not Found");
+        return errorResponse;
     }
 
     private boolean userExists(String cpf, Map<String, Object> credentials) {
